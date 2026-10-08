@@ -9,7 +9,10 @@ Plataforma SaaS de reservas multi-empresa. Backend en Laravel (API REST) con MyS
 - **Cliente registrado obligatorio:** toda cita tiene un `user_id`. Los datos de contacto del cliente se obtienen con la relación, no se duplican en la cita.
 - **Horario de trabajo y citas son cosas distintas:** `horarios` guarda cuándo trabaja cada empleado cada semana; `citas` guarda cada reserva concreta.
 - **El precio se copia en la cita:** si el servicio cambia de precio, las citas antiguas conservan el precio con el que se reservaron.
-- **Nada se borra si tiene historial:** servicios, empleados y empresas se desactivan con `activo = false`.
+- **Nada se borra si tiene historial:** servicios, empleados y empresas se desactivan con `activo = false`. Las claves foráneas usan `restrictOnDelete`, así que MySQL impide borrar un usuario, empleado, servicio o empresa con datos asociados. Solo `empleado_servicio` y `horarios` se borran en cascada con su empleado, porque son configuración y no historial.
+- **Cualquier usuario puede reservar:** el rol solo decide a qué paneles accede. Un dueño o un empleado también puede reservar como cliente en otro negocio.
+- **Datos de contacto obligatorios:** teléfono, email, dirección y ciudad de la empresa son obligatorios al darla de alta.
+- **Zona horaria:** la aplicación trabaja en `Europe/Madrid` (`config/app.php`).
 
 ## Tablas
 
@@ -114,7 +117,15 @@ Horario semanal de trabajo. Un turno partido son dos filas el mismo día; un dí
 | notas | text | nullable |
 | created_at / updated_at | timestamp | |
 
-Índice: `(empleado_id, inicio)`, para buscar rápido las citas de un empleado en un día.
+Índices: `(empleado_id, inicio)`, para buscar rápido las citas de un empleado en un día, y `(empresa_id, inicio)`, para la agenda y el dashboard del negocio.
+
+### Reglas que no puede garantizar la base de datos
+
+Se validan en la aplicación al guardar:
+
+- Dos citas del mismo empleado no pueden solaparse. Se comprueba dentro de una transacción que bloquea las citas del empleado (`lockForUpdate`).
+- El servicio y el empleado de una cita pertenecen a la misma empresa que la cita.
+- En un horario, `hora_fin` es posterior a `hora_inicio` y los tramos del mismo día no se pisan. No se admiten turnos que pasen de medianoche.
 
 ## Relaciones
 
