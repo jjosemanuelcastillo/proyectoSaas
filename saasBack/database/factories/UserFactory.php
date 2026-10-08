@@ -25,8 +25,10 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
+            'name' => fake()->firstName().' '.fake()->lastName().' '.fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
+            'telefono' => fake()->numerify('6## ### ###'),
+            'rol' => 'cliente',
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
@@ -40,6 +42,27 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
+        ]);
+    }
+
+    public function superadmin(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'rol' => 'superadmin',
+        ]);
+    }
+
+    public function dueno(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'rol' => 'dueno',
+        ]);
+    }
+
+    public function empleado(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'rol' => 'empleado',
         ]);
     }
 }
