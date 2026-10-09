@@ -20,15 +20,15 @@ class RegistroController extends Controller
             'name'     => $validated['name'],
             'email'    => $validated['email'],
             'telefono' => $validated['telefono'],
-            'rol' => $validated['rol'],
+            'rol'     => 'cliente',
             'password' => $validated['password'],
         ]);
 
-       $token =  $user->createToken('auth_token')->plainTextToken;
+        $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
-            'user' => $user,
-            'token' => $token
-        ],201);
+            'user'  => $user,
+            'token' => $token,
+        ], 201);
     }
 }
