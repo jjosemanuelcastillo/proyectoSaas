@@ -1,0 +1,48 @@
+<div class="min-h-screen flex items-center justify-center bg-slate-50 px-4">
+  <div class="w-full max-w-[400px] bg-white border border-slate-200 rounded-xl p-8 flex flex-col gap-5">
+    <!-- Marca: logo + nombre -->
+    <div class="flex items-center gap-2.5">
+      <div class="size-8 rounded-lg bg-indigo-600 flex items-center justify-center">
+        <span class="text-sm font-medium text-white">A</span>
+      </div>
+      <span class="text-lg font-semibold text-slate-900">Agendo</span>
+    </div>
+    <div class="flex flex-col gap-1">
+      <h1 class="text-2xl font-semibold text-slate-900">Iniciar sesión</h1>
+      <p class="text-sm text-slate-500">Accede para gestionar tus citas</p>
+    </div>
+    @if (error()){
+    <div class="rounded-lg bg-red-50 px-3 py-2.5 text-xs font-medium text-red-600" role="alert">
+      <span>{{ error() }}</span>
+    </div>
+    }
+
+    <!-- Formulario -->
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+      <!-- Email -->
+      <div class="flex flex-col gap-1.5">
+        <label for="email" class="text-sm font-medium text-slate-900">Correo electrónico</label>
+        <input id="email" type="email" formControlName="email" placeholder="tu@email.com"
+          class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-100">
+        @if(form.controls.email.touched && form.controls.email.hasError('required')){
+        <p class="text-xs text-red-600">Escribe tu correo</p>
+        } @else if (form.controls.email.touched && form.controls.email.hasError('email')) {
+        <p class="text-xs text-red-600">El correo no tiene un formato válido</p>
+        }
+      </div>
+      <!-- Contraseña -->
+      <div class="flex flex-col gap-1.5">
+        <label for="password" class="text-sm font-medium text-slate-900">Contraseña</label>
+        <input id="password" type="password" formControlName="password" placeholder="••••••••"
+          class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-100">
+        @if(form.controls.password.hasError('required') && form.controls.password.touched){
+        <p class="text-xs text-red-600">La contraseña es obligatoria</p>
+        }
+      </div>
+      <button type="submit"
+        class="mt-2 cursor-pointer rounded-lg bg-indigo-600 py-2.5 text-sm font-medium text-white hover:bg-indigo-700">
+        Entrar
+      </button>
+    </form>
+  </div>
+</div>
