@@ -2,10 +2,11 @@ import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../core/service/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   standalone: true,
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
@@ -13,6 +14,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class LoginComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
+  private router = inject(Router);
+
   error = signal<string | null>(null);
 
   form = this.fb.nonNullable.group({
@@ -29,6 +32,7 @@ export class LoginComponent {
     this.authService.login(this.form.getRawValue()).subscribe({
       next: (respuesta) => {
         console.log('Logeado', respuesta.user);
+        this.router.navigate(['/inicio']);
       },
       error: (err: HttpErrorResponse) => {
         if (err.status === 401) {

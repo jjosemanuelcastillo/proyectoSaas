@@ -1,1 +1,81 @@
-<p>registro works!</p>
+<div class="min-h-screen flex items-center justify-center bg-slate-50 px-4">
+  <div class="w-full max-w-[400px] bg-white border border-slate-200 rounded-xl p-8 flex flex-col gap-5">
+    <!-- Marca: logo + nombre -->
+    <div class="flex items-center gap-2.5">
+      <div class="size-8 rounded-lg bg-indigo-600 flex items-center justify-center">
+        <span class="text-sm font-medium text-white">A</span>
+      </div>
+      <span class="text-lg font-semibold text-slate-900">Agendo</span>
+    </div>
+    <div class="flex flex-col gap-1">
+      <h1 class="text-2xl font-semibold text-slate-900">Registro</h1>
+      <p class="text-sm text-slate-500">Regístrate para unirte a nosotros</p>
+    </div>
+    @if (error()){
+    <div class="rounded-lg bg-red-50 px-3 py-2.5 text-xs font-medium text-red-600" role="alert">
+      <span>{{ error() }}</span>
+    </div>
+    }
+
+    <!-- Formulario -->
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+      <!-- Nombre -->
+      <div class="flex flex-col gap-1.5">
+        <label for="name" class="text-sm font-medium text-slate-900">Nombre</label>
+        <input id="name" type="text" formControlName="name" placeholder="María lopez"
+          class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-100">
+        @if(form.controls.name.dirty && form.controls.name.hasError('required')){
+        <p class="text-xs text-red-600">Escribe tu nombre</p>
+        }
+      </div>
+      <!-- Email -->
+      <div class="flex flex-col gap-1.5">
+        <label for="email" class="text-sm font-medium text-slate-900">Correo electrónico</label>
+        <input id="email" type="email" formControlName="email" placeholder="tu@email.com"
+          class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-100">
+        @if(form.controls.email.dirty && form.controls.email.hasError('required')){
+        <p class="text-xs text-red-600">Escribe tu correo</p>
+        } @else if (form.controls.email.dirty && form.controls.email.hasError('email')) {
+        <p class="text-xs text-red-600">El correo no tiene un formato válido</p>
+        }@else{}
+      </div>
+      <!-- Teléfono -->
+      <div class="flex flex-col gap-1.5">
+        <label for="telefono" class="text-sm font-medium text-slate-900">Número de telefono</label>
+        <input id="telefono" type="tel" formControlName="telefono" placeholder=""
+          class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-100">
+        @if(form.controls.telefono.dirty && form.controls.telefono.hasError('required')){
+        <p class="text-xs text-red-600">numero de telefono obligatorio</p>
+        } @else if (form.controls.email.touched && form.controls.email.hasError('email')) {
+        <p class="text-xs text-red-600">Deben ser 9 números, sin espacios</p>
+        }
+      </div>
+      <!-- Contraseña -->
+      <div class="flex flex-col gap-1.5">
+        <label for="password" class="text-sm font-medium text-slate-900">Contraseña</label>
+        <input id="password" type="password" formControlName="password" placeholder="••••••••"
+          class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-100">
+        @if(form.controls.password.hasError('required') && form.controls.password.dirty){
+        <p class="text-xs text-red-600">La contraseña es obligatoria</p>
+        }@else if (form.controls.password?.hasError('minlength')) {
+        <p class="text-xs text-red-600">La contraseña no valida</p>
+        }
+      </div>
+      <!-- Repetir contraseña -->
+      <div class="flex flex-col gap-1.5">
+        <label for="passwordconfirm" class="text-sm font-medium text-slate-900">Repetir contraseña</label>
+        <input id="passwordconfirm" type="password" formControlName="password_confirmation" placeholder="••••••••"
+          class="rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-100">
+        @if (form.controls.password_confirmation.hasError('required') && form.controls.password_confirmation.dirty) {
+        <p class="text-xs text-red-600">Confirma tu contraseña</p>
+        } @else if (form.hasError('contrasenaIgual') && form.controls.password_confirmation.dirty) {
+        <p class="text-xs text-red-600">Las contraseñas no coinciden</p>
+        }
+      </div>
+      <button type="submit"
+        class="mt-2 cursor-pointer rounded-lg bg-indigo-600 py-2.5 text-sm font-medium text-white hover:bg-indigo-700">
+        Crear cuenta
+      </button>
+    </form>
+  </div>
+</div>
