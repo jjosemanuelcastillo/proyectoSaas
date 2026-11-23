@@ -41,6 +41,10 @@ export class AuthService {
     return localStorage.getItem('token');
   }
 
+  getUser(): Observable<AuthResponse>{
+    return this.http.get<AuthResponse>(`${this.apiUrl}/user`)
+  }
+
   logout(): Observable<unknown> {
     return this.http.post(`${this.apiUrl}/logout`, {}).pipe(
       finalize(() => {
